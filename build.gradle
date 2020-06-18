@@ -24,7 +24,7 @@ dependencies {
 sourceCompatibility = JavaVersion.VERSION_1_8
 targetCompatibility = JavaVersion.VERSION_1_8
 
-archivesBaseName = 'ColorGame'
+archivesBaseName = 'GameAPI'
 
 sourceSets.main {
     java.srcDirs = ['src']
@@ -46,5 +46,5 @@ processResources {
 def pluginDir = System.getProperty('plugin.dir')
 if (pluginDir != null) {
     jar.destinationDirectory = file(pluginDir)
-    jar.archiveFileName = 'ColorGame.jar'
+    jar.archiveFileName = 'GameAPI.jar'
 }
