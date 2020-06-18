@@ -1,0 +1,50 @@
+plugins {
+    id 'java'
+}
+
+group = 'com.elikill58'
+
+repositories {
+    jcenter()
+    maven {
+        name = 'spigot'
+        url = 'https://hub.spigotmc.org/nexus/content/repositories/snapshots/'
+    }
+    maven {
+        name = 'sonatype'
+        url = 'https://oss.sonatype.org/content/groups/public/'
+    }
+}
+
+dependencies {
+    implementation 'org.spigotmc:spigot-api:1.15.2-R0.1-SNAPSHOT'
+    implementation 'com.google.code.findbugs:jsr305:3.0.2'
+}
+
+sourceCompatibility = JavaVersion.VERSION_1_8
+targetCompatibility = JavaVersion.VERSION_1_8
+
+archivesBaseName = 'ColorGame'
+
+sourceSets.main {
+    java.srcDirs = ['src']
+    resources.srcDirs = ['resources']
+}
+
+compileJava.options.encoding = 'UTF-8'
+
+import org.apache.tools.ant.filters.ReplaceTokens
+
+processResources {
+    from(sourceSets.main.resources.srcDirs) {
+        // Only process this file, if world_base is processed its files are somehow corrupted
+        include 'plugin.yml'
+        filter ReplaceTokens, tokens: [version: version]
+    }
+}
+
+def pluginDir = System.getProperty('plugin.dir')
+if (pluginDir != null) {
+    jar.destinationDirectory = file(pluginDir)
+    jar.archiveFileName = 'ColorGame.jar'
+}
