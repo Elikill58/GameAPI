@@ -17,8 +17,8 @@ repositories {
 }
 
 dependencies {
-    implementation 'org.spigotmc:spigot-api:1.15.2-R0.1-SNAPSHOT'
-    implementation 'com.google.code.findbugs:jsr305:3.0.2'
+    compileOnly 'org.spigotmc:spigot-api:1.16.1-R0.1-SNAPSHOT'
+    compileOnly 'com.google.code.findbugs:jsr305:3.0.2'
 }
 
 sourceCompatibility = JavaVersion.VERSION_1_8
