@@ -21,6 +21,7 @@ public class GameProperties {
     public boolean disableNaturalSpawning = false;
     public boolean disableFallDamages = false;
     public boolean blockReload = false;
+    public boolean scoreboardEnabled = false;
 
     /**
      * If the pvp is enabled
@@ -204,5 +205,16 @@ public class GameProperties {
     public GameProperties blockReload(boolean blockReload) {
         this.blockReload = blockReload;
         return this;
+    }
+    
+    /**
+     * If the scoreboard is enabled
+     * 
+     * @param enabled true if the scoreboard will be enabled
+     * @return the instance of {@link GameProperties}
+     */
+    public GameProperties scoreboardEnable(boolean enabled) {
+    	this.scoreboardEnabled = enabled;
+    	return this;
     }
 }

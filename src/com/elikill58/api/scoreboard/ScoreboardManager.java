@@ -12,6 +12,8 @@ import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.plugin.Plugin;
 
+import com.elikill58.api.game.GameAPI;
+
 /*
  * This file is part of SamaGamesAPI.
  *
@@ -53,7 +55,7 @@ public class ScoreboardManager implements Listener {
 
 	@EventHandler
 	public void onLogin(PlayerJoinEvent e) {
-		if (scoreboards.containsKey(e.getPlayer().getUniqueId())) {
+		if (scoreboards.containsKey(e.getPlayer().getUniqueId()) || !GameAPI.ACTIVE_GAME.properties.scoreboardEnabled) {
 			return;
 		}
 		scoreboards.put(e.getPlayer().getUniqueId(), new PersonalScoreboard(e.getPlayer()));
