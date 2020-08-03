@@ -39,7 +39,8 @@ class Listeners implements Listener {
         if(game.properties.forcedGamemode != null)
             event.getPlayer().setGameMode(game.properties.forcedGamemode);
 
-        ACTIVE_PHASE.onJoin(event);
+        if(ACTIVE_PHASE != null)
+        	ACTIVE_PHASE.onJoin(event);
         Booster.addBooster(event.getPlayer());
     }
 
