@@ -7,6 +7,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.UUID;
+import java.util.concurrent.CompletableFuture;
 
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.ConfigurationSection;
@@ -53,60 +54,64 @@ public class DatabaseData extends AbstractData {
 	
 	@Override
 	public PlayerData loadData(UUID uuid) {
-		PlayerData pi = null;
-		try {
-			PreparedStatement statement = getConnection().prepareStatement("SELECT * FROM " + table + " WHERE uuid = ?");
-			statement.setString(1, uuid.toString());
-			ResultSet resultSet = statement.executeQuery();
-			if (resultSet.next()) {
-				double coins = resultSet.getDouble("coins");
-				pi = new PlayerData(uuid, coins, resultSet.getString("name"));
-				for(Data data : getPlugin().getGame().dataValues)
-					pi.set(data.getKey(), resultSet.getObject(data.getKey()));
-			} else {
-				String playerName = Bukkit.getPlayer(uuid).getName();
-				PreparedStatement statementCreate = getConnection()
-						.prepareStatement("INSERT INTO " + table + " (uuid,name) VALUES (?,?)");
-				statementCreate.setString(1, uuid.toString());
-				statementCreate.setString(2, playerName);
-				statementCreate.executeUpdate();
-				pi = new PlayerData(uuid, 0, playerName);
+		return CompletableFuture.supplyAsync(() -> {
+			PlayerData pi = null;
+			try {
+				PreparedStatement statement = getConnection().prepareStatement("SELECT * FROM " + table + " WHERE uuid = ?");
+				statement.setString(1, uuid.toString());
+				ResultSet resultSet = statement.executeQuery();
+				if (resultSet.next()) {
+					double coins = resultSet.getDouble("coins");
+					pi = new PlayerData(uuid, coins, resultSet.getString("name"));
+					for(Data data : getPlugin().getGame().dataValues)
+						pi.set(data.getKey(), resultSet.getObject(data.getKey()));
+				} else {
+					String playerName = Bukkit.getPlayer(uuid).getName();
+					PreparedStatement statementCreate = getConnection()
+							.prepareStatement("INSERT INTO " + table + " (uuid,name) VALUES (?,?)");
+					statementCreate.setString(1, uuid.toString());
+					statementCreate.setString(2, playerName);
+					statementCreate.executeUpdate();
+					pi = new PlayerData(uuid, 0, playerName);
+				}
+				statement.close();
+			} catch (Exception e) {
+				e.printStackTrace();
 			}
-			statement.close();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		return pi;
+			return pi;
+		}).join();
 	}
 
 	@Override
 	public void saveData(PlayerData pi) {
-		try {
-			HashMap<Integer, Object> hash = new HashMap<>();
-			int i = 3;
-			String values = "";
-			for(Data data : getPlugin().getGame().dataValues) {
-				hash.put(i++, pi.get(data.getKey()));
-				values += ", " + data.getKey() + " = ?";
-			}
-			
-			PreparedStatement stateUpdate = getConnection()
-					.prepareStatement("UPDATE " + table + " SET name = ?, coins = ?" + values + " WHERE uuid = ?");
-			stateUpdate.setString(1, pi.getPlayerName());
-			stateUpdate.setDouble(2, pi.getCoins());
-			hash.forEach((nb, obj) -> {
-				try {
-					stateUpdate.setObject(nb, obj);
-				} catch (SQLException e) {
-					e.printStackTrace();
+		CompletableFuture.runAsync(() -> {
+			try {
+				HashMap<Integer, Object> hash = new HashMap<>();
+				int i = 3;
+				String values = "";
+				for(Data data : getPlugin().getGame().dataValues) {
+					hash.put(i++, pi.get(data.getKey()));
+					values += ", " + data.getKey() + " = ?";
 				}
-			});
-			stateUpdate.setString(i, pi.getUUID().toString());
-			stateUpdate.executeUpdate();
-			stateUpdate.close();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+				
+				PreparedStatement stateUpdate = getConnection()
+						.prepareStatement("UPDATE " + table + " SET name = ?, coins = ?" + values + " WHERE uuid = ?");
+				stateUpdate.setString(1, pi.getPlayerName());
+				stateUpdate.setDouble(2, pi.getCoins());
+				hash.forEach((nb, obj) -> {
+					try {
+						stateUpdate.setObject(nb, obj);
+					} catch (SQLException e) {
+						e.printStackTrace();
+					}
+				});
+				stateUpdate.setString(i, pi.getUUID().toString());
+				stateUpdate.executeUpdate();
+				stateUpdate.close();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		});
 	}
 
 	public Connection getConnection() {
@@ -120,12 +125,14 @@ public class DatabaseData extends AbstractData {
 	}
 
 	private void connect() {
-		try {
-			connection = DriverManager.getConnection("jdbc:mysql://" + ip + "/" + database + "?autoReconnect=true", username, password);
-			getPlugin().getLogger().info("Connected to database " + ip + "/" + database + " !");
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
+		CompletableFuture.runAsync(() -> {
+			try {
+				connection = DriverManager.getConnection("jdbc:mysql://" + ip + "/" + database + "?autoReconnect=true", username, password);
+				getPlugin().getLogger().info("Connected to database " + ip + "/" + database + " !");
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		});
 	}
 	
 	@Override

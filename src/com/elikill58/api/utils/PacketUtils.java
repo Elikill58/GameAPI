@@ -22,20 +22,28 @@ public class PacketUtils {
 	static {
 		try {
 			CRAFT_PLAYER_CLASS = Class.forName("org.bukkit.craftbukkit." + VERSION + ".entity.CraftPlayer");
-			CHAT_SERIALIZER_CLASS = Class.forName("net.minecraft.server." + VERSION + ".IChatBaseComponent$ChatSerializer");
-			if(!Version.getVersion().equals(Version.V1_7)) {
-				UPDATE_DISPLAY_NAME = ENUM_PLAYER_INFO.getField("UPDATE_DISPLAY_NAME").get(ENUM_PLAYER_INFO);
-			}
-			Class<?> enumScoreboardAction = null;
-			if(Version.getVersion().isNewerOrEquals(Version.V1_13)) {
-				enumScoreboardAction = Class.forName("net.minecraft.server." + VERSION + ".ScoreboardServer").getDeclaredClasses()[0];
+			Version ver = Version.getVersion();
+			if(ver.equals(Version.V1_7)) {
+				CHAT_SERIALIZER_CLASS = Class.forName("net.minecraft.server." + VERSION + ".ChatSerializer");
+				// For 1.7, there isn't any Enum, it works only thanks to integers.
+				UPDATE_DISPLAY_NAME = 3;
+				SCOREBOARD_ACTION_CHANGE = 0;
+				SCOREBOARD_ACTION_REMOVE = 1;
+				SCOREBOARD_HEALTH_DISPLAY = 0;
 			} else {
-				enumScoreboardAction = Class.forName("net.minecraft.server." + VERSION + ".PacketPlayOutScoreboardScore").getDeclaredClasses()[0];
+				CHAT_SERIALIZER_CLASS = Class.forName("net.minecraft.server." + VERSION + ".IChatBaseComponent$ChatSerializer");
+				UPDATE_DISPLAY_NAME = ENUM_PLAYER_INFO.getField("UPDATE_DISPLAY_NAME").get(ENUM_PLAYER_INFO);
+				Class<?> enumScoreboardAction = null;
+				if(Version.getVersion().isNewerOrEquals(Version.V1_13)) {
+					enumScoreboardAction = Class.forName("net.minecraft.server." + VERSION + ".ScoreboardServer").getDeclaredClasses()[0];
+				} else {
+					enumScoreboardAction = Class.forName("net.minecraft.server." + VERSION + ".PacketPlayOutScoreboardScore").getDeclaredClasses()[0];
+				}
+				SCOREBOARD_ACTION_CHANGE = enumScoreboardAction.getDeclaredField("CHANGE").get(enumScoreboardAction);
+				SCOREBOARD_ACTION_REMOVE = enumScoreboardAction.getDeclaredField("REMOVE").get(enumScoreboardAction);
+				Class<?> enumScoreboardHealthDisplay = Class.forName("net.minecraft.server." + VERSION + ".IScoreboardCriteria").getDeclaredClasses()[0];
+				SCOREBOARD_HEALTH_DISPLAY = enumScoreboardHealthDisplay.getDeclaredField("INTEGER").get(enumScoreboardHealthDisplay);
 			}
-			SCOREBOARD_ACTION_CHANGE = enumScoreboardAction.getDeclaredField("CHANGE").get(enumScoreboardAction);
-			SCOREBOARD_ACTION_REMOVE = enumScoreboardAction.getDeclaredField("REMOVE").get(enumScoreboardAction);
-			Class<?> enumScoreboardHealthDisplay = Class.forName("net.minecraft.server." + VERSION + ".IScoreboardCriteria").getDeclaredClasses()[0];
-			SCOREBOARD_HEALTH_DISPLAY = enumScoreboardHealthDisplay.getDeclaredField("INTEGER").get(enumScoreboardHealthDisplay);
 
 			try {
 				GAME_PROFILE_CLASS = Class.forName("net.minecraft.util.com.mojang.authlib.GameProfile");
@@ -52,7 +60,7 @@ public class PacketUtils {
 	}
 	
 	/**
-	 * This Map is to reduce Reflection action which take more ressources than just RAM action
+	 * This Map is to reduce Reflection action which take more resources than just RAM action
 	 */
 	private static final HashMap<String, Class<?>> ALL_CLASS = new HashMap<>();
 	

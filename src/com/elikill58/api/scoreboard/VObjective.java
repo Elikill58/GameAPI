@@ -363,14 +363,19 @@ public class VObjective {
 				Object packet = PacketUtils.createPacket("PacketPlayOutScoreboardObjective");
 				
 				Object displayObjectivePacket = null;
-				if(Version.getVersion().isNewerOrEquals(Version.V1_13)) {
+				Version ver = Version.getVersion();
+				if(ver.isNewerOrEquals(Version.V1_13)) {
 					displayObjectivePacket = PacketUtils.createChatBaseComponent(objectiveDisplayName);
 				} else
 					displayObjectivePacket = objectiveDisplayName;
 				Reflection.setValue(packet, "a", objectiveName); // Objective name
 				Reflection.setValue(packet, "b", displayObjectivePacket); // Showed objective name
-				Reflection.setValue(packet, "c", format); // Show data
-				Reflection.setValue(packet, "d", action); // Action to do - 0: Create 1: Remove 2: Update
+				if(ver.equals(Version.V1_7))
+					Reflection.setValue(packet, "c", action); // Show data
+				else {
+					Reflection.setValue(packet, "c", format); // Show data
+					Reflection.setValue(packet, "d", action); // Action to do - 0: Create 1: Remove 2: Update
+				}
 
 				return packet;
 			} catch (ReflectiveOperationException e) {

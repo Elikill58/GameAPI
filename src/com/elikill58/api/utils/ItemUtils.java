@@ -16,7 +16,7 @@ public class ItemUtils {
 	 * Item for compatibility between 1.8 and 1.15
 	 * 
 	 */
-	public static final Material BED = getMaterialWithCompatibility("BED", "LEGACY_BED");
+	public static final Material BED = getMaterialWithCompatibility("RED_BED", "BED");
 
 	public static final ItemStack INK_GREEN;
 	public static final ItemStack INK_RED;
@@ -109,17 +109,17 @@ public class ItemUtils {
 		return null;
 	}
 	
-	public static boolean checkItem(Material type, byte dur, ItemStack item) {
+	/*public static boolean checkTeam(Team t, ItemStack item) {
 		if(item == null)
 			return false;
 		if(Version.getVersion().isNewerOrEquals(Version.V1_13)) {
-			return type == item.getType();
+			return t.getMaterialColored() == item.getType();
 		} else {
-			return type == item.getType() && dur == getDurability(item);
+			return t.getMaterialColored() == item.getType() && t.getBlockColor() == getDurability(item);
 		}
-	}
+	}*/
 	
-	public static boolean checkItem(ItemStack t, ItemStack item) {
+	public static boolean checkTeam(ItemStack t, ItemStack item) {
 		if(item == null)
 			return false;
 		if(Version.getVersion().isNewerOrEquals(Version.V1_13)) {
