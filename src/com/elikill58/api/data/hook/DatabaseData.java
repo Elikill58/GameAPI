@@ -125,14 +125,12 @@ public class DatabaseData extends AbstractData {
 	}
 
 	private void connect() {
-		CompletableFuture.runAsync(() -> {
-			try {
-				connection = DriverManager.getConnection("jdbc:mysql://" + ip + "/" + database + "?autoReconnect=true", username, password);
-				getPlugin().getLogger().info("Connected to database " + ip + "/" + database + " !");
-			} catch (SQLException e) {
-				e.printStackTrace();
-			}
-		});
+		try {
+			connection = DriverManager.getConnection("jdbc:mysql://" + ip + "/" + database + "?autoReconnect=true", username, password);
+			getPlugin().getLogger().info("Connected to database " + ip + "/" + database + " !");
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
 	}
 	
 	@Override
