@@ -61,6 +61,8 @@ public class DatabaseData extends AbstractData {
 				checkColumnState.close();
 				if(returnedId == 0)
 					break;
+				else
+					pl.getLogger().info("Edited database for column " + data.getKey() + ". Code: " + returnedId);
 			}
 		} catch (SQLException e) {
 			pl.getLogger().severe("Failed to load database table ...");
