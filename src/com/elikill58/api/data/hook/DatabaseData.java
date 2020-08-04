@@ -51,11 +51,10 @@ public class DatabaseData extends AbstractData {
 			List<Data> sorted = new ArrayList<>(pl.getGame().dataValues);
 			sorted.sort((a, b) -> b.getDataVersion() - a.getDataVersion());
 			for(Data data : sorted) {
-				PreparedStatement checkColumnState = connection.prepareStatement("IF COL_LENGTH ('" + table + "'.'" + data.getKey() + "') IS NULL"
-						+ "BEGIN"
+				PreparedStatement checkColumnState = connection.prepareStatement("IF COL_LENGTH ('" + table + "'.'" + data.getKey() + "') IS NULL\n"
+						+ "BEGIN\n"
 						+ "	ALTER TABLE " + table
 						+ "	 ADD " + data.toDB()
-						+ values
 						+ "END;");
 				int returnedId = checkColumnState.executeUpdate();
 				checkColumnState.close();
