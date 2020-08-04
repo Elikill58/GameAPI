@@ -51,17 +51,17 @@ public class DatabaseData extends AbstractData {
 			List<Data> sorted = new ArrayList<>(pl.getGame().dataValues);
 			sorted.sort((a, b) -> b.getDataVersion() - a.getDataVersion());
 			for(Data data : sorted) {
-				PreparedStatement checkColumnState = connection.prepareStatement("IF COL_LENGTH ('" + table + "'.'" + data.getKey() + "') IS NULL\n"
-						+ "BEGIN\n"
-						+ "	ALTER TABLE " + table
-						+ "	 ADD " + data.toDB()
-						+ "END;");
-				int returnedId = checkColumnState.executeUpdate();
-				checkColumnState.close();
-				if(returnedId == 0)
+				PreparedStatement checkState = connection.prepareStatement("SELECT COUNT(*) as nb FROM INFORMATION_SCHEMA.COLUMNS "
+						+ "WHERE TABLE_NAME = '" + table + "' AND COLUMN_NAME = '" + data.getKey() + "'");
+				ResultSet rs = checkState.executeQuery();
+				rs.next();
+				if(rs.getInt("nb") == 0) {
+					PreparedStatement editColumnState = connection.prepareStatement("ALTER TABLE " + table + " ADD COLUMN " + data.toDB());
+					int returnedId = editColumnState.executeUpdate();
+					editColumnState.close();
+					pl.getLogger().info("Edited table " + table + ". Column " + data.getKey() + " added. Code: " + returnedId);
+				} else
 					break;
-				else
-					pl.getLogger().info("Edited database for column " + data.getKey() + ". Code: " + returnedId);
 			}
 		} catch (SQLException e) {
 			pl.getLogger().severe("Failed to load database table ...");
