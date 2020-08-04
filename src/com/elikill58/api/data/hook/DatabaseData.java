@@ -5,7 +5,9 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 
@@ -46,6 +48,20 @@ public class DatabaseData extends AbstractData {
 					+ "`created_at` datetime DEFAULT CURRENT_TIMESTAMP NOT NULL);");
 			state.executeUpdate();
 			state.close();
+			List<Data> sorted = new ArrayList<>(pl.getGame().dataValues);
+			sorted.sort((a, b) -> b.getDataVersion() - a.getDataVersion());
+			for(Data data : sorted) {
+				PreparedStatement checkColumnState = connection.prepareStatement("IF COL_LENGTH ('" + table + "'.'" + data.getKey() + "') IS NULL"
+						+ "BEGIN"
+						+ "	ALTER TABLE " + table
+						+ "	 ADD " + data.toDB()
+						+ values
+						+ "END;");
+				int returnedId = checkColumnState.executeUpdate();
+				checkColumnState.close();
+				if(returnedId == 0)
+					break;
+			}
 		} catch (SQLException e) {
 			pl.getLogger().severe("Failed to load database table ...");
 			e.printStackTrace();

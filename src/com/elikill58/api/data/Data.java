@@ -5,6 +5,7 @@ import javax.annotation.Nullable;
 public class Data {
 	
 	private final String key, databaseType, defaultValue;
+	private final int dataVersion;
 	private final boolean canBeNull;
 	
 	/**
@@ -13,9 +14,10 @@ public class Data {
 	 * @param key of the data (which will be saved)
 	 * @param databaseType used for database
 	 * @param defaultValue the default value of the data
+	 * @param dataVersion the version of the data (0 for first version)
 	 */
-	public Data(String key, String databaseType, String defaultValue) {
-		this(key, databaseType, defaultValue, false);
+	public Data(String key, String databaseType, String defaultValue, int dataVersion) {
+		this(key, databaseType, defaultValue, dataVersion, false);
 	}
 
 	/**
@@ -24,12 +26,14 @@ public class Data {
 	 * @param key of the data (which will be saved)
 	 * @param databaseType used for database
 	 * @param defaultValue the default value of the data
+	 * @param dataVersion the version of the data (0 for first version)
 	 * @param canBeNull true if the data can be null
 	 */
-	public Data(String key, String databaseType, String defaultValue, boolean canBeNull) {
+	public Data(String key, String databaseType, String defaultValue, int dataVersion, boolean canBeNull) {
 		this.key = key;
 		this.databaseType = databaseType;
 		this.defaultValue = defaultValue;
+		this.dataVersion = dataVersion;
 		this.canBeNull = canBeNull;
 	}
 
@@ -69,6 +73,15 @@ public class Data {
 	 */
 	public boolean isCanBeNull() {
 		return canBeNull;
+	}
+	
+	/**
+	 * Get the version ID when this data have been added
+	 * 
+	 * @return the version of data
+	 */
+	public int getDataVersion() {
+		return dataVersion;
 	}
 	
 	/**
