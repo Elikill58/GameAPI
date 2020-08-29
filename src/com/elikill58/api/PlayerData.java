@@ -1,6 +1,8 @@
 package com.elikill58.api;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.UUID;
 
 import org.bukkit.entity.Player;
@@ -75,4 +77,8 @@ public class PlayerData {
 	public static PlayerData getPlayerData(UUID uuid) {
     	return DATA.computeIfAbsent(uuid, (id) -> DataManager.getData().loadData(id));
     }
+	
+	public static List<PlayerData> getPlayerDatas(){
+		return new ArrayList<>(DATA.values());
+	}
 }
