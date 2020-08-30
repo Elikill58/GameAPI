@@ -26,22 +26,22 @@ public class Messages {
 		}
 		String message = ChatColor.RESET + config.getString(dir);
 		for (int index = 0; index <= placeholders.length - 1; index += 2)
-			message = message.replaceAll(String.valueOf(placeholders[index]), String.valueOf(placeholders[index + 1]))
-					.replaceAll("%prefix%", GameAPI.ACTIVE_GAME.prefix())
-					.replaceAll("%online%", String.valueOf(Utils.getOnlinePlayers().size()))
-					.replaceAll("%maxplayer%", String.valueOf(Bukkit.getMaxPlayers()));
-		return Utils.applyColorCodes(message);
+			message = message.replaceAll(String.valueOf(placeholders[index]), String.valueOf(placeholders[index + 1]));
+		return Utils.applyColorCodes(message
+				.replaceAll("%prefix%", GameAPI.ACTIVE_GAME.prefix())
+				.replaceAll("%online%", String.valueOf(Utils.getOnlinePlayers().size()))
+				.replaceAll("%maxplayer%", String.valueOf(Bukkit.getMaxPlayers())));
 	}
 
 	public static List<String> getMessageList(String dir, Object... placeholders) {
 		List<String> result = new ArrayList<>();
 		for(String msg : config.getStringList(dir)) {
 			for (int index = 0; index <= placeholders.length - 1; index += 2)
-				msg = msg.replaceAll(String.valueOf(placeholders[index]), String.valueOf(placeholders[index + 1]))
-						.replaceAll("%prefix%", GameAPI.ACTIVE_GAME.prefix())
-						.replaceAll("%online%", String.valueOf(Utils.getOnlinePlayers().size()))
-						.replaceAll("%maxplayer%", String.valueOf(Bukkit.getMaxPlayers()));
-			result.add(Utils.applyColorCodes(msg));
+				msg = msg.replaceAll(String.valueOf(placeholders[index]), String.valueOf(placeholders[index + 1]));
+			result.add(Utils.applyColorCodes(msg
+					.replaceAll("%prefix%", GameAPI.ACTIVE_GAME.prefix())
+					.replaceAll("%online%", String.valueOf(Utils.getOnlinePlayers().size()))
+					.replaceAll("%maxplayer%", String.valueOf(Bukkit.getMaxPlayers()))));
 		}
 		if(result.isEmpty())
 			return Arrays.asList(dir);
