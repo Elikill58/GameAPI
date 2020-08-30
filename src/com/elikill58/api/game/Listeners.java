@@ -25,6 +25,8 @@ import org.bukkit.event.server.ServerCommandEvent;
 import org.bukkit.event.server.ServerListPingEvent;
 
 import com.elikill58.api.Messages;
+import com.elikill58.api.PlayerData;
+import com.elikill58.api.data.DataManager;
 
 class Listeners implements Listener {
 
@@ -50,6 +52,7 @@ class Listeners implements Listener {
             ACTIVE_PHASE.onLeft(event);
 
         Booster.recalculateBooster();
+		DataManager.getData().saveData(PlayerData.getPlayerData(event.getPlayer()));
     }
 
     @EventHandler
