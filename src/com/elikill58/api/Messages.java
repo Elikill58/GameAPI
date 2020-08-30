@@ -39,8 +39,9 @@ public class Messages {
 		for(String msg : config.getStringList(dir)) {
 			for (int index = 0; index <= placeholders.length - 1; index += 2)
 				msg = msg.replaceAll(String.valueOf(placeholders[index]), String.valueOf(placeholders[index + 1]));
+			if(msg.contains("%prefix%"))
+				msg = msg.replaceAll("%prefix%", GameAPI.ACTIVE_GAME.prefix());
 			result.add(Utils.applyColorCodes(msg
-					.replaceAll("%prefix%", GameAPI.ACTIVE_GAME.prefix())
 					.replaceAll("%online%", String.valueOf(Utils.getOnlinePlayers().size()))
 					.replaceAll("%maxplayer%", String.valueOf(Bukkit.getMaxPlayers()))));
 		}
