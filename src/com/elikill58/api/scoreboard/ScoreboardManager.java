@@ -13,6 +13,7 @@ import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.plugin.Plugin;
 
 import com.elikill58.api.game.GameAPI;
+import com.elikill58.api.utils.Utils;
 
 /*
  * This file is part of SamaGamesAPI.
@@ -47,6 +48,8 @@ public class ScoreboardManager implements Listener {
 				getExecutorMonoThread().execute(() -> scoreboard.setLines());
 			}
 		}, 80, 80, TimeUnit.MILLISECONDS);
+		
+		Utils.getOnlinePlayers().forEach((p) -> onLogin(new PlayerJoinEvent(p, null)));
 	}
 
 	public void onDisable() {
