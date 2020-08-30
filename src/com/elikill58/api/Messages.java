@@ -18,6 +18,17 @@ public class Messages {
 
 	private static YamlConfiguration config;
 	private static File configFile;
+	
+	public static String getLiteMessage(String dir, Object... placeholders) {
+		if(!config.contains(dir)) {
+			GameAPI.GAME_PROVIDER.getLogger().info("Cannot find the message '" + dir + "'.");
+			return dir;
+		}
+		String message = ChatColor.RESET + config.getString(dir);
+		for (int index = 0; index <= placeholders.length - 1; index += 2)
+			message = message.replaceAll(String.valueOf(placeholders[index]), String.valueOf(placeholders[index + 1]));
+		return Utils.applyColorCodes(message);
+	}
 
 	public static String getMessage(String dir, Object... placeholders) {
 		if(!config.contains(dir)) {
