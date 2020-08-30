@@ -27,8 +27,9 @@ public class Messages {
 		String message = ChatColor.RESET + config.getString(dir);
 		for (int index = 0; index <= placeholders.length - 1; index += 2)
 			message = message.replaceAll(String.valueOf(placeholders[index]), String.valueOf(placeholders[index + 1]));
+		if(message.contains("%prefix%"))
+			message = message.replaceAll("%prefix%", GameAPI.ACTIVE_GAME.prefix());
 		return Utils.applyColorCodes(message
-				.replaceAll("%prefix%", GameAPI.ACTIVE_GAME.prefix())
 				.replaceAll("%online%", String.valueOf(Utils.getOnlinePlayers().size()))
 				.replaceAll("%maxplayer%", String.valueOf(Bukkit.getMaxPlayers())));
 	}
