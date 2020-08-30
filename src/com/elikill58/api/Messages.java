@@ -55,6 +55,14 @@ public class Messages {
 	public static void sendMessageList(CommandSender p, String dir, Object... placeholders) {
 		getMessageList(dir, placeholders).forEach((s) -> p.sendMessage(Utils.applyColorCodes(s)));
 	}
+	
+	public static void broadcastMessage(String dir, Object... placeholders) {
+		Bukkit.broadcastMessage(getMessage(dir, placeholders));
+	}
+	
+	public static void broadcastMessageList(String dir, Object... placeholders) {
+		getMessageList(dir, placeholders).forEach((s) -> Bukkit.broadcastMessage(s));
+	}
 
 	public static void load(Plugin pl) {
 		configFile = new File(pl.getDataFolder().getAbsolutePath() + File.separator + "messages.yml");
