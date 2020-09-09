@@ -1,6 +1,7 @@
 package com.elikill58.api.game;
 
 import org.bukkit.Bukkit;
+import org.bukkit.plugin.PluginManager;
 
 import com.elikill58.api.Messages;
 import com.elikill58.api.UniversalUtils;
@@ -18,14 +19,15 @@ public final class GameAPI {
 	public static Game<?> ACTIVE_GAME;
 	private static ScoreboardManager scoreboardManager;
 
-	public static void enable(GameProvider gameProvider, Game<?> game) {
+	public static void enable(GameProvider gameProvider) {
 
-		ACTIVE_GAME = game;
+		ACTIVE_GAME = gameProvider.getGame();
 		GAME_PROVIDER = gameProvider;
-		InventoryManager.INV.clear();
-		Bukkit.getServer().getPluginManager().registerEvents(new InventoryManager(), gameProvider.getPlugin());
-		Bukkit.getServer().getPluginManager().registerEvents(new Listeners(game), gameProvider.getPlugin());
-		scoreboardManager = new ScoreboardManager(gameProvider.getPlugin());
+		
+		PluginManager pm = Bukkit.getServer().getPluginManager();
+		pm.registerEvents(new InventoryManager(), gameProvider);
+		pm.registerEvents(new Listeners(ACTIVE_GAME), gameProvider);
+		scoreboardManager = new ScoreboardManager(gameProvider);
 
 		try {
 			String dir = Phase.class.getProtectionDomain().getCodeSource().getLocation().getFile().replaceAll("%20", " ");
@@ -35,17 +37,17 @@ public final class GameAPI {
 			if (dir.startsWith("file:/"))
 				dir = dir.substring(UniversalUtils.getOs() == UniversalUtils.OS.LINUX ? 5 : 6);
 
-			for (Object classDir : UniversalUtils.getClasseNamesInPackage(dir, "com.elikill58." + game.name().toLowerCase() + ".phases")) {
+			for (Object classDir : UniversalUtils.getClasseNamesInPackage(dir, "com.elikill58." + ACTIVE_GAME.name().toLowerCase() + ".phases")) {
 				try {
 					Phase phase = (Phase) Class.forName(classDir.toString().replaceAll(".class", "")).newInstance();
-					game.phases.register(phase);
+					ACTIVE_GAME.phases.register(phase);
 				} catch (Exception temp) {}
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		DataManager.init(GAME_PROVIDER);
-		Messages.load(GAME_PROVIDER.getPlugin());
+		Messages.load(GAME_PROVIDER);
 		startPhase(ACTIVE_GAME.lobbyPhase());
 	}
 

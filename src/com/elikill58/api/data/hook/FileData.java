@@ -18,7 +18,7 @@ public class FileData extends AbstractData {
 	
 	public FileData(GameProvider pl) {
 		super(pl);
-		DATA_FOLDER = new File(pl.getPlugin().getDataFolder(), "user");
+		DATA_FOLDER = new File(pl.getDataFolder(), "user");
 		if(!DATA_FOLDER.exists())
 			DATA_FOLDER.mkdirs();
 	}

@@ -123,7 +123,7 @@ public class Utils {
 		ByteArrayDataOutput out = ByteStreams.newDataOutput();
 		for (String s : lines)
 			out.writeUTF(s);
-		p.sendPluginMessage(GameAPI.GAME_PROVIDER.getPlugin(), channel, out.toByteArray());
+		p.sendPluginMessage(GameAPI.GAME_PROVIDER, channel, out.toByteArray());
 	}
 
 	public static File copy(Plugin pl, String fileName, File f) {

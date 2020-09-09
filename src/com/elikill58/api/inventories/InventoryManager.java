@@ -13,7 +13,7 @@ import org.bukkit.inventory.ItemStack;
 
 public class InventoryManager implements Listener {
 
-	public static final HashMap<InventoryType, AbstractInventory> INV = new HashMap<>();
+	private static final HashMap<InventoryType, AbstractInventory> INV = new HashMap<>();
 
 	@EventHandler
 	public void onInventoryClick(InventoryClickEvent e) {

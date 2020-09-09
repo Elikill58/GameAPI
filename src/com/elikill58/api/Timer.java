@@ -96,7 +96,7 @@ public class Timer {
      * Start the timer
      */
     public void start() {
-        this.task = Bukkit.getScheduler().scheduleSyncRepeatingTask(GameAPI.GAME_PROVIDER.getPlugin(), () -> {
+        this.task = Bukkit.getScheduler().scheduleSyncRepeatingTask(GameAPI.GAME_PROVIDER, () -> {
             if(actionBar && actionbarReminders.containsKey(duration)) {
                 ActionBar.sendToAll(Messages.getMessage(actionbarReminders.get(duration),
                         "%duration%", String.valueOf(duration),

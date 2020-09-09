@@ -1,17 +1,8 @@
 package com.elikill58.api.game;
 
-import java.util.logging.Logger;
+import org.bukkit.plugin.java.JavaPlugin;
 
-import org.bukkit.configuration.file.FileConfiguration;
-import org.bukkit.plugin.Plugin;
-
-public interface GameProvider {
+public abstract class GameProvider extends JavaPlugin {
 	
-	public Logger getLogger();
-	
-	public Plugin getPlugin();
-	
-	public FileConfiguration getConfig();
-	
-	public Game<?> getGame();
+	public abstract Game<?> getGame();
 }
