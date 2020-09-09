@@ -6,6 +6,7 @@ import com.elikill58.api.Messages;
 import com.elikill58.api.UniversalUtils;
 import com.elikill58.api.data.DataManager;
 import com.elikill58.api.game.phase.Phase;
+import com.elikill58.api.inventories.InventoryManager;
 import com.elikill58.api.scoreboard.ScoreboardManager;
 import com.elikill58.api.utils.Utils;
 
@@ -21,7 +22,9 @@ public final class GameAPI {
 
 		ACTIVE_GAME = game;
 		GAME_PROVIDER = gameProvider;
-		gameProvider.getPlugin().getServer().getPluginManager().registerEvents(new Listeners(game), gameProvider.getPlugin());
+		InventoryManager.INV.clear();
+		Bukkit.getServer().getPluginManager().registerEvents(new InventoryManager(), gameProvider.getPlugin());
+		Bukkit.getServer().getPluginManager().registerEvents(new Listeners(game), gameProvider.getPlugin());
 		scoreboardManager = new ScoreboardManager(gameProvider.getPlugin());
 
 		try {
