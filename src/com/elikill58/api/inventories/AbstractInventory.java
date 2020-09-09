@@ -7,7 +7,7 @@ import org.bukkit.event.inventory.InventoryCloseEvent;
 
 public abstract class AbstractInventory {
 	
-	public abstract boolean isInstance(GameHolder nh);
+	public abstract InventoryType getType();
 	public abstract void openInventory(Player p, Object... args);
 	public void closeInventory(InventoryCloseEvent e, Player p) {}
 	public abstract void manageInventory(InventoryClickEvent e, Player p, Material m, GameHolder nh);

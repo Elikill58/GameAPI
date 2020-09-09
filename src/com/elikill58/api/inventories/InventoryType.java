@@ -11,4 +11,11 @@ public class InventoryType {
 	public String getId() {
 		return id;
 	}
+	
+	@Override
+	public boolean equals(Object obj) {
+		if(obj == null || !(obj instanceof InventoryType))
+			return false;
+		return this.id.equalsIgnoreCase(((InventoryType) obj).id) || super.equals(obj);
+	}
 }
