@@ -1,5 +1,7 @@
 package com.elikill58.api.game;
 
+import java.util.logging.Logger;
+
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.PluginManager;
 
@@ -20,6 +22,19 @@ public final class GameAPI {
 	private static ScoreboardManager scoreboardManager;
 
 	public static void enable(GameProvider gameProvider) {
+		if(ACTIVE_GAME != null && GAME_PROVIDER != null) {
+			Logger log = gameProvider.getLogger();
+			String current = GAME_PROVIDER.getName(), tried = gameProvider.getName();
+			log.severe("-------- " + current + " - " + tried + " --------");
+			log.severe("Cannot load multiple mini-games from Elikill58's API");
+			log.severe("Please remove one of this plugin: " + current + " or " + tried);
+			log.severe("Then restart your server.");
+			log.severe("If you need specific feature, contact Elikill58 at:");
+			log.severe("@Elikill58 on Twitter & Instagram. @Elikill#0743 on Discord");
+			log.severe("arpetzouille@gmail.com by email");
+			log.severe("-------- " + current + " - " + tried + " --------");
+			return;
+		}
 
 		ACTIVE_GAME = gameProvider.getGame();
 		GAME_PROVIDER = gameProvider;
