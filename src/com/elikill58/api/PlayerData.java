@@ -73,6 +73,10 @@ public class PlayerData {
 		return shop;
 	}
 	
+	public int getShopLevel(String name) {
+		return shop.getOrDefault(name, 0);
+	}
+	
 	public void addShop(String name, int i) {
 		shop.put(name, i);
 	}
