@@ -3,6 +3,7 @@ package com.elikill58.api.game;
 import static com.elikill58.api.game.GameAPI.ACTIVE_PHASE;
 
 import org.bukkit.ChatColor;
+import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -23,6 +24,7 @@ import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.server.ServerCommandEvent;
 import org.bukkit.event.server.ServerListPingEvent;
+import org.bukkit.event.weather.WeatherChangeEvent;
 
 import com.elikill58.api.Messages;
 import com.elikill58.api.PlayerData;
@@ -72,7 +74,6 @@ class Listeners implements Listener {
             ACTIVE_PHASE.onBlockPlace(event);
         }
     }
-
 
     @EventHandler
     public void onPvp(EntityDamageByEntityEvent event) {
@@ -160,5 +161,16 @@ class Listeners implements Listener {
     		e.setCancelled(true);
     		e.getSender().sendMessage(ChatColor.RED + "The reload command is disabled by ColorGame ! Please, restart your server and NOT use reload.");
     	}
+    }
+    
+    @EventHandler
+    public void onWeatherChange(WeatherChangeEvent event) {
+        if (game.properties.clearWeather && event.toWeatherState()) {
+            event.setCancelled(true);
+            World world = event.getWorld();
+            world.setStorm(false);
+            world.setThundering(false);
+            world.setWeatherDuration(0);
+        }
     }
 }

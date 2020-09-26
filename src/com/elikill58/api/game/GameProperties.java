@@ -22,6 +22,7 @@ public class GameProperties {
     public boolean disableFallDamages = false;
     public boolean blockReload = false;
     public boolean scoreboardEnabled = false;
+    public boolean clearWeather = true;
 
     /**
      * If the pvp is enabled
@@ -215,6 +216,17 @@ public class GameProperties {
      */
     public GameProperties scoreboardEnable(boolean enabled) {
     	this.scoreboardEnabled = enabled;
+    	return this;
+    }
+    
+    /**
+     * If the weather is cleared
+     * 
+     * @param clear true if don't want rain or thunder weather
+     * @return this instance of {@link GameProperties}}
+     */
+    public GameProperties clearWeather(boolean clear) {
+    	this.clearWeather = clear;
     	return this;
     }
 }
