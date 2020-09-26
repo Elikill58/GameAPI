@@ -44,6 +44,7 @@ public class DatabaseData extends AbstractData {
 					+ "`uuid` varchar(36) NOT NULL,"
 					+ "`name` varchar(36) NOT NULL,"
 					+ "`coins` double DEFAULT '0' NOT NULL,"
+					+ "`bought` varchar(1024) DEFAULT '' NOT NULL,"
 					+ values
 					+ "`created_at` datetime DEFAULT CURRENT_TIMESTAMP NOT NULL);");
 			state.executeUpdate();
@@ -80,6 +81,7 @@ public class DatabaseData extends AbstractData {
 				if (resultSet.next()) {
 					double coins = resultSet.getDouble("coins");
 					pi = new PlayerData(uuid, coins, resultSet.getString("name"));
+					pi.fromJsonShop(resultSet.getString("bought"));
 					for(Data data : getPlugin().getGame().dataValues)
 						pi.set(data.getKey(), resultSet.getObject(data.getKey()));
 				} else {
@@ -104,7 +106,7 @@ public class DatabaseData extends AbstractData {
 		CompletableFuture.runAsync(() -> {
 			try {
 				HashMap<Integer, Object> hash = new HashMap<>();
-				int i = 3;
+				int i = 4;
 				String values = "";
 				for(Data data : getPlugin().getGame().dataValues) {
 					hash.put(i++, pi.get(data.getKey()));
@@ -112,9 +114,10 @@ public class DatabaseData extends AbstractData {
 				}
 				
 				PreparedStatement stateUpdate = getConnection()
-						.prepareStatement("UPDATE " + table + " SET name = ?, coins = ?" + values + " WHERE uuid = ?");
+						.prepareStatement("UPDATE " + table + " SET name = ?, coins = ?, bought = ?" + values + " WHERE uuid = ?");
 				stateUpdate.setString(1, pi.getPlayerName());
 				stateUpdate.setDouble(2, pi.getCoins());
+				stateUpdate.setString(3, pi.getShopToJson());
 				hash.forEach((nb, obj) -> {
 					try {
 						stateUpdate.setObject(nb, obj);

@@ -8,14 +8,17 @@ import java.util.UUID;
 import org.bukkit.entity.Player;
 
 import com.elikill58.api.data.DataManager;
+import com.elikill58.api.json.JSONObject;
+import com.elikill58.api.json.parser.JSONParser;
 
 public class PlayerData {
 
 	private static final HashMap<UUID, PlayerData> DATA = new HashMap<>();
 	private final UUID uuid;
     private final String playerName;
+	private final HashMap<String, Object> content = new HashMap<>();
+	private final HashMap<String, Integer> shop = new HashMap<>();
 	private double coins = 0;
-	private HashMap<String, Object> content = new HashMap<>();
 	
 	public PlayerData(UUID uuid, double coins, String name) {
 		this.uuid = uuid;
@@ -64,6 +67,31 @@ public class PlayerData {
 	
 	public void set(String key, Object obj) {
 		content.put(key, obj);
+	}
+	
+	public HashMap<String, Integer> getShop() {
+		return shop;
+	}
+	
+	public void addShop(String name, int i) {
+		shop.put(name, i);
+	}
+	
+	public void setShop(String name, int i) {
+		shop.put(name, i);
+	}
+	
+	public String getShopToJson() {
+		return JSONObject.toJSONString(shop);
+	}
+	
+	@SuppressWarnings("unchecked")
+	public void fromJsonShop(String content) {
+		try {
+			((JSONObject) new JSONParser().parse(content)).forEach((name, i) -> shop.put((String) name, (Integer) i));
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 	
 	public void save() {

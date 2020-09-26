@@ -30,6 +30,7 @@ public class FileData extends AbstractData {
 			try {
 				YamlConfiguration config = YamlConfiguration.loadConfiguration(new File(DATA_FOLDER, uuid.toString() + ".yml"));
 				pd = new PlayerData(uuid, config.getDouble("coins", 0), config.getString("playername"));
+				pd.fromJsonShop(config.getString("bought", ""));
 				for(Data data : this.getPlugin().getGame().dataValues)
 					pd.set(data.getKey(), config.get(data.getKey()));
 			} catch (Exception e) {
@@ -47,6 +48,7 @@ public class FileData extends AbstractData {
 				YamlConfiguration config = YamlConfiguration.loadConfiguration(configFile);
 				config.set("playername", sp.getPlayerName());
 				config.set("coins", sp.getCoins());
+				config.set("bought", sp.getShopToJson());
 				for(Data data : this.getPlugin().getGame().dataValues)
 					config.set(data.getKey(), sp.get(data.getKey()));
 				config.save(configFile);
