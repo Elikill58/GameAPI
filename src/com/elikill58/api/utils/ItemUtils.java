@@ -18,21 +18,22 @@ public class ItemUtils {
 	 */
 	public static final Material BED = getMaterialWithCompatibility("RED_BED", "BED");
 
-	public static final ItemStack INK_GREEN;
-	public static final ItemStack INK_RED;
+	public static ItemStack INK_GREEN, INK_RED;
 
 	static {
-		ItemStackBuilder inkGreenBuilder;
-		ItemStackBuilder inkRedBuilder;
-		if(Version.getVersion().isNewerOrEquals(Version.V1_13)) {
-			inkGreenBuilder = new ItemStackBuilder(Material.valueOf("LIME_DYE"));
-			inkRedBuilder = new ItemStackBuilder(Material.valueOf("RED_DYE"));
-		} else {
-			inkGreenBuilder = new ItemStackBuilder(Material.valueOf("INK_SACK")).durability((short) 10);
-			inkRedBuilder = new ItemStackBuilder(Material.valueOf("INK_SACK")).durability((short) 1);
+		if(GameAPI.ACTIVE_GAME != null && GameAPI.ACTIVE_GAME.properties.showHelp) {
+			ItemStackBuilder inkGreenBuilder;
+			ItemStackBuilder inkRedBuilder;
+			if(Version.getVersion().isNewerOrEquals(Version.V1_13)) {
+				inkGreenBuilder = new ItemStackBuilder(Material.valueOf("LIME_DYE"));
+				inkRedBuilder = new ItemStackBuilder(Material.valueOf("RED_DYE"));
+			} else {
+				inkGreenBuilder = new ItemStackBuilder(Material.valueOf("INK_SACK")).durability((short) 10);
+				inkRedBuilder = new ItemStackBuilder(Material.valueOf("INK_SACK")).durability((short) 1);
+			}
+			INK_GREEN = inkGreenBuilder.displayName(Messages.getMessage("lobby.help.name", "%state%", Messages.getMessage("item-yes"))).build();
+			INK_RED = inkRedBuilder.displayName(Messages.getMessage("lobby.help.name", "%state%", Messages.getMessage("item-no"))).build();
 		}
-		INK_GREEN = inkGreenBuilder.displayName(Messages.getMessage("lobby.help.name", "%state%", Messages.getMessage("item-yes"))).build();
-		INK_RED = inkRedBuilder.displayName(Messages.getMessage("lobby.help.name", "%state%", Messages.getMessage("item-no"))).build();
 	}
 	
 	public static Material getMaterialWithCompatibility(String... tempMat) {

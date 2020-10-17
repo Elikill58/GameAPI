@@ -23,6 +23,7 @@ public class GameProperties {
     public boolean blockReload = false;
     public boolean scoreboardEnabled = false;
     public boolean clearWeather = true;
+    public boolean showHelp = false;
 
     /**
      * If the pvp is enabled
@@ -227,6 +228,17 @@ public class GameProperties {
      */
     public GameProperties clearWeather(boolean clear) {
     	this.clearWeather = clear;
+    	return this;
+    }
+    
+    /**
+     * If the help is showed
+     * 
+     * @param showHelp true if can show help on game start
+     * @return this instance of {@link GameProperties}}
+     */
+    public GameProperties showHelp(boolean showHelp) {
+    	this.showHelp = showHelp;
     	return this;
     }
 }

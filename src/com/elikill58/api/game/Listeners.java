@@ -30,7 +30,7 @@ import com.elikill58.api.Messages;
 import com.elikill58.api.PlayerData;
 import com.elikill58.api.data.DataManager;
 
-class Listeners implements Listener {
+public class Listeners implements Listener {
 
 	private final Game<?> game;
 	
