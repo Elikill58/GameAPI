@@ -16,7 +16,6 @@ public class ItemUtils {
 	 * Item for compatibility between 1.8 and 1.15
 	 * 
 	 */
-	public static final Material BED = getMaterialWithCompatibility("RED_BED", "BED");
 
 	public static ItemStack INK_GREEN, INK_RED;
 
