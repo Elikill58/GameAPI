@@ -89,7 +89,21 @@ public class ItemStackBuilder {
     }
     
     public ItemStackBuilder unbreakable() {
-    	this.itemMeta.setUnbreakable(true);
+    	return unbreakable(true);
+    }
+    
+    public ItemStackBuilder unbreakable(boolean unbreakable) {
+    	try {
+	    	Object toMakeUnbreakable = null;
+	    	if(Version.getVersion().isNewerOrEquals(Version.V1_13))
+	    		toMakeUnbreakable = this.itemMeta;
+	    	else {
+	    		toMakeUnbreakable = this.itemMeta.getClass().getDeclaredMethod("spigot").invoke(itemMeta);
+	    	}
+	    	toMakeUnbreakable.getClass().getMethod("setUnbreakable", boolean.class).invoke(toMakeUnbreakable, unbreakable);
+    	} catch (Exception e) {
+    		e.printStackTrace();
+		}
     	return this;
     }
 

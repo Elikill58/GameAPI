@@ -27,6 +27,11 @@ public class Materials {
 	public static final Material GOLD_PICKAXE = getMaterialWithCompatibility("GOLD_PICKAXE", "GOLDEN_PICKAXE");
 	public static final Material GOLD_SWORD = getMaterialWithCompatibility("GOLD_SWORD", "GOLDEN_SWORD");
 	
+	public static final Material STONE_SPADE = getMaterialWithCompatibility("STONE_SPADE");
+	public static final Material STONE_AXE = getMaterialWithCompatibility("STONE_AXE");
+	public static final Material STONE_PICKAXE = getMaterialWithCompatibility("STONE_PICKAXE");
+	public static final Material STONE_SWORD = getMaterialWithCompatibility("STONE_SWORD");
+	
 	public static final Material WOOD_SPADE = getMaterialWithCompatibility("WOOD_SPADE", "WOODEN_SHOVEL");
 	public static final Material WOOD_AXE = getMaterialWithCompatibility("WOOD_AXE", "WOODEN_AXE");
 	public static final Material WOOD_PICKAXE = getMaterialWithCompatibility("WOOD_PICKAXE", "WOODEN_PICKAXE");
