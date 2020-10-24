@@ -92,6 +92,8 @@ public class PlayerData {
 	@SuppressWarnings("unchecked")
 	public void fromJsonShop(String content) {
 		try {
+			if(content == null || content.isEmpty())
+				content = "{}";
 			((JSONObject) new JSONParser().parse(content)).forEach((name, i) -> shop.put(name.toString(), Integer.parseInt(i.toString())));
 		} catch (Exception e) {
 			e.printStackTrace();
