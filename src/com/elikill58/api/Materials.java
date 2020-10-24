@@ -36,5 +36,25 @@ public class Materials {
 	public static final Material WOOD_AXE = getMaterialWithCompatibility("WOOD_AXE", "WOODEN_AXE");
 	public static final Material WOOD_PICKAXE = getMaterialWithCompatibility("WOOD_PICKAXE", "WOODEN_PICKAXE");
 	public static final Material WOOD_SWORD = getMaterialWithCompatibility("WOOD_SWORD", "WOODEN_SWORD");
+
+	public static final Material DIAMOND_HELMET = getMaterialWithCompatibility("DIAMOND_HELMET");
+	public static final Material DIAMOND_CHESTPLATE = getMaterialWithCompatibility("DIAMOND_CHESTPLATE");
+	public static final Material DIAMOND_LEGGINGS = getMaterialWithCompatibility("DIAMOND_LEGGINGS");
+	public static final Material DIAMOND_BOOTS = getMaterialWithCompatibility("DIAMOND_BOOTS");
+
+	public static final Material IRON_HELMET = getMaterialWithCompatibility("IRON_HELMET");
+	public static final Material IRON_CHESTPLATE = getMaterialWithCompatibility("IRON_CHESTPLATE");
+	public static final Material IRON_LEGGINGS = getMaterialWithCompatibility("IRON_LEGGINGS");
+	public static final Material IRON_BOOTS = getMaterialWithCompatibility("IRON_BOOTS");
+
+	public static final Material GOLD_HELMET = getMaterialWithCompatibility("GOLD_HELMET");
+	public static final Material GOLD_CHESTPLATE = getMaterialWithCompatibility("GOLD_CHESTPLATE");
+	public static final Material GOLD_LEGGINGS = getMaterialWithCompatibility("GOLD_LEGGINGS");
+	public static final Material GOLD_BOOTS = getMaterialWithCompatibility("GOLD_BOOTS");
+
+	public static final Material LEATHER_HELMET = getMaterialWithCompatibility("LEATHER_HELMET");
+	public static final Material LEATHER_CHESTPLATE = getMaterialWithCompatibility("LEATHER_CHESTPLATE");
+	public static final Material LEATHER_LEGGINGS = getMaterialWithCompatibility("LEATHER_LEGGINGS");
+	public static final Material LEATHER_BOOTS = getMaterialWithCompatibility("LEATHER_BOOTS");
 	
 }
