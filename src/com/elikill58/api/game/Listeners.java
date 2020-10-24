@@ -40,6 +40,7 @@ public class Listeners implements Listener {
 
 	@EventHandler
     public void onJoin(PlayerJoinEvent event) {
+		event.setJoinMessage(null);
         if(game.properties.forcedGamemode != null)
             event.getPlayer().setGameMode(game.properties.forcedGamemode);
 
@@ -50,6 +51,7 @@ public class Listeners implements Listener {
 
     @EventHandler
     public void handleLeft(PlayerQuitEvent event) {
+    	event.setQuitMessage(null);
         if(ACTIVE_PHASE != null)
             ACTIVE_PHASE.onLeft(event);
 
