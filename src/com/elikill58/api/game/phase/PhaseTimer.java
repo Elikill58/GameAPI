@@ -7,12 +7,11 @@ import org.bukkit.Bukkit;
 
 import com.elikill58.api.ActionBar;
 import com.elikill58.api.Messages;
-import com.elikill58.api.Timer;
 import com.elikill58.api.game.GameAPI;
 
 public class PhaseTimer {
 
-	private Phase phase;
+	private String phaseId;
 	private final int initialDuration;
 	private int duration;
 	private boolean actionBar = false;
@@ -22,32 +21,28 @@ public class PhaseTimer {
 
 	private int task;
 
-	public PhaseTimer(Phase phase, int duration) {
-		this.phase = phase;
+	public PhaseTimer(String phaseId, int duration) {
+		this.phaseId = phaseId;
 		this.initialDuration = duration;
 		this.duration = duration;
 	}
 
 	/**
-	 * Cr&eacute;e un nouveau {@link PhaseTimer}
+	 * Create a new {@link PhaseTimer}
 	 *
-	 * @param phase
-	 *            la phase &agrave; d&eacute;marrer eu terme du timer
-	 * @param duration
-	 *            la dur&eacute;e du timer, en secondes
-	 * @param actionBar
-	 *            indique si le temps du timer doit &ecirc;tre indiqu&eacute; dans
-	 *            l'action bar
+	 * @param phase the phase id which have to be started at the end of timer
+	 * @param duration the timer duration, in seconds
+	 * @param actionBar say if the timer have to be displayed on actionbar
 	 */
-	public PhaseTimer(Phase phase, int duration, boolean actionBar) {
+	public PhaseTimer(String phase, int duration, boolean actionBar) {
 		this(phase, duration);
 
 		this.actionBar = actionBar;
 	}
 
 	/**
-	 * Ajoute un rappel au moment donn&eacute;. Le placeholder %duration% est
-	 * remplac&eacute; par la dur&eacute;e actuelle
+	 * Add a recall at the given moment
+	 * The placeholder %duration% is replaced by the current value
 	 *
 	 * @param when
 	 *            le moment en secondes pr&eacute;c&eacute;dent le terme du timer
@@ -106,7 +101,7 @@ public class PhaseTimer {
 	}
 
 	/**
-	 * Démarre le timer
+	 * Start the timer
 	 */
 	public void start() {
 		this.task = Bukkit.getScheduler().scheduleSyncRepeatingTask(GameAPI.GAME_PROVIDER, () -> {
@@ -128,7 +123,7 @@ public class PhaseTimer {
 			}
 
 			if (duration == 0) {
-				GameAPI.startPhase(phase);
+				GameAPI.startPhase(GameAPI.ACTIVE_GAME.phases.get(phaseId));
 				this.cancel();
 				return;
 			}
@@ -169,31 +164,41 @@ public class PhaseTimer {
 
 	public static class Builder {
 
-		private Phase phase;
+		private String phaseId;
 		private int duration;
 		private boolean actionBar = false;
 		private Map<Integer, String> reminders = new HashMap<>();
 		private Map<Integer, String> actionbarReminders = new HashMap<>();
 
 		/**
-		 * Obligatoire, d&eacute;finit la phase &agrave; d&eacute;marrer au terme du
-		 * timer
+		 * Needed, define the phase to start at the end of the timer
+		 * Prefer to use {@link #phase(String)} with the phase ID to prevent NPE
 		 *
-		 * @param phase
-		 *            la phae &agrave; d&eacute;marrer au terme du timer
-		 * @return ce builder
+		 * @param phase the ID of the phase
+		 * @return this builder
 		 */
+		@Deprecated
 		public Builder phase(Phase phase) {
-			this.phase = phase;
+			this.phaseId = phase == null ? null : phase.id;
 			return this;
 		}
 
 		/**
-		 * Obligatoire, d&eacute;finit la dur&eacute;e du timer, en secondes
+		 * Needed, define the phase to start at the end of the timer
 		 *
-		 * @param duration
-		 *            la dur&eacute;e du timer, en secondes
-		 * @return ce builder
+		 * @param phaseId the ID of the phase
+		 * @return this builder
+		 */
+		public Builder phase(String phaseId) {
+			this.phaseId = phaseId;
+			return this;
+		}
+
+		/**
+		 * Needed, define the timer duration, in seconds
+		 *
+		 * @param duration the timer duration, in seconds
+		 * @return this builder
 		 */
 		public Builder duration(int duration) {
 			this.duration = duration;
@@ -201,21 +206,17 @@ public class PhaseTimer {
 		}
 
 		/**
-		 * Optionnel, ajoute un rappel au moment donn&eacute;.
+		 * Optional, add a recall at the given moment
 		 * <p>
-		 * Le placeholder %duration% est remplac&eacute; par la dur&eacute;e actuelle
+		 * The placeholder %duration% is replaced by the current duration
 		 * <p>
-		 * Le placeholder %mins% est remplac&eacute; par le nombre de minutes restantes
+		 * The placeholder %mins% is replaced by the remaining minutes
 		 * <p>
-		 * Le placeholder %secs% est remplac�� par le nombre de secondes restantes dans
-		 * la minutes actuelle
+		 * The placeholder %secs% is replaced by the remaining seconds
 		 *
-		 * @param when
-		 *            le moment pr&eacute;c&eacute;dent le terme du timer o&ugrave; il
-		 *            faut envoyer le message
-		 * @param key
-		 *            la cl&eacute; du message &agrave; envoyer
-		 * @return ce builder
+		 * @param when the moment when the message have to be send
+		 * @param key the message key to show
+		 * @return this builder
 		 */
 		public Builder reminder(int when, String key) {
 			this.reminders.put(when, key);
@@ -223,21 +224,17 @@ public class PhaseTimer {
 		}
 
 		/**
-		 * Optionnel, ajoute un rappel au moment donn&eacute;.
+		 * Optional, add a recall at the given moment
 		 * <p>
-		 * Le placeholder %duration% est remplac&eacute; par la dur&eacute;e actuelle
+		 * The placeholder %duration% is replaced by the current duration
 		 * <p>
-		 * Le placeholder %mins% est remplac&eacute; par le nombre de minutes restantes
+		 * The placeholder %mins% is replaced by the remaining minutes
 		 * <p>
-		 * Le placeholder %secs% est remplac�� par le nombre de secondes restantes dans
-		 * la minutes actuelle
+		 * The placeholder %secs% is replaced by the remaining seconds
 		 *
-		 * @param when
-		 *            le moment pr&eacute;c&eacute;dent le terme du timer o&ugrave; il
-		 *            faut envoyer le message
-		 * @param key
-		 *            la cl&eacute; du message &agrave; envoyer
-		 * @return ce builder
+		 * @param when the moment when the message will be showed in actionbar
+		 * @param key the message key to show
+		 * @return this builder
 		 */
 		public Builder actionbarReminder(int when, String key) {
 			this.actionbarReminders.put(when, key);
@@ -245,16 +242,12 @@ public class PhaseTimer {
 		}
 
 		/**
-		 * Ajoute un message qui sera affich&eacute; quand le timer sera entre les deux
-		 * valeurs sp&eacute;cifi&eacute;es.
+		 * Add a message which will be showed during two given values
 		 *
-		 * @param from
-		 *            la valeur minimale, inclus
-		 * @param to
-		 *            la valeur maximale, inclus
-		 * @param key
-		 *            la cl&eacute; du message &agrave; afficher
-		 * @return ce builder
+		 * @param from the minimum value (included)
+		 * @param to the maximum value (included)
+		 * @param key the message key to show
+		 * @return this builder
 		 */
 		public Builder actionbarRange(int from, int to, String key) {
 			for (int i = from; i >= to; i--) {
@@ -266,13 +259,10 @@ public class PhaseTimer {
 		}
 
 		/**
-		 * Optionnel, indique si le temps du timer doit &ecirc;tre indiqu&eacute; dans
-		 * l'action bar
+		 * Optional, say if the timer have to be showed in action bar
 		 *
-		 * @param actionBar
-		 *            true si le temps du timer doit &ecirc;tre indiqu&eacute; dans
-		 *            l'action bar
-		 * @return ce builder
+		 * @param actionBar true if the timer will be showed in action bar
+		 * @return this builder
 		 */
 		public Builder actionbar(boolean actionBar) {
 			this.actionBar = actionBar;
@@ -280,21 +270,21 @@ public class PhaseTimer {
 		}
 
 		/**
-		 * Cr&eacute;e le {@link PhaseTimer}
+		 * Create the {@link PhaseTimer}
 		 *
-		 * @return le {@link PhaseTimer}
+		 * @return a {@link PhaseTimer}
 		 */
 		public PhaseTimer build() {
-			PhaseTimer phaseTimer = new PhaseTimer(this.phase, this.duration, this.actionBar);
+			PhaseTimer phaseTimer = new PhaseTimer(this.phaseId, this.duration, this.actionBar);
 			phaseTimer.reminders = reminders;
 			phaseTimer.actionbarReminders = actionbarReminders;
 			return phaseTimer;
 		}
 
 		/**
-		 * Cr&eacute;e le {@link Timer} et le d&eacute;marre.
+		 * Create the {@link PhaseTimer}
 		 *
-		 * @return le timer d&eacute;marr&eacute;
+		 * @return a {@link PhaseTimer}
 		 */
 		public PhaseTimer start() {
 			PhaseTimer timer = this.build();
